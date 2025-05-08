@@ -1,5 +1,5 @@
 from django.http import HttpResponse,JsonResponse
-from .models import Categories,Subcategories,Products,SubcategoriesChildParentRelation
+from .models import Category,Subcategory,Product,SubcategoriesChildParentRelation
 from . import utils
 import json
 
@@ -11,7 +11,7 @@ def fetch_categories_info(request):
         }
     
         
-        for category in Categories.objects.all():
+        for category in Category.objects.all():
 
             response['categories'].append({
 
@@ -22,7 +22,7 @@ def fetch_categories_info(request):
                 })
 
 
-            for subcategory in Subcategories.objects.filter(category=category):
+            for subcategory in Subcategory.objects.filter(category=category):
                 response['categories'][-1]['subcategories'].append(utils.subcategories_json_builder(subcategory))
 
         
@@ -32,7 +32,7 @@ def fetch_categories_info(request):
 def fetch_products(request):
     params = request.GET
     category_path = params.get('category_path',None)
-    products  = Products.objects.filter(path=category_path)
+    products  = Product.objects.filter(path=category_path)
     
     return JsonResponse([product.toJson() for product in products],safe=False)
 
