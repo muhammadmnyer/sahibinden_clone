@@ -1,6 +1,6 @@
-from .models import SubcategoriesChildParentRelation,Subcategories
+from .models import SubcategoriesChildParentRelation,Subcategory
 
-def subcategories_json_builder(subcategory:Subcategories):
+def subcategories_json_builder(subcategory:Subcategory):
     return {
         "subcategory_id":subcategory.subcategory_id,
         "subcategory_name":subcategory.subcategory_name,

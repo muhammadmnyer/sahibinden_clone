@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categories,Subcategories,Products,SubcategoriesChildParentRelation
+from .models import Category,Subcategory,Product,SubcategoriesChildParentRelation
 from .admin_forms import ProductAdminForm
 
 class CategoriesView(admin.ModelAdmin):
@@ -26,7 +26,7 @@ class SubcategoriesChildParentRelationView(admin.ModelAdmin):
 
 
 
-admin.site.register(Categories, CategoriesView)
-admin.site.register(Subcategories, SubcategoriesView)
-admin.site.register(Products, ProductsView)
+admin.site.register(Category, CategoriesView)
+admin.site.register(Subcategory, SubcategoriesView)
+admin.site.register(Product, ProductsView)
 admin.site.register(SubcategoriesChildParentRelation,SubcategoriesChildParentRelationView)

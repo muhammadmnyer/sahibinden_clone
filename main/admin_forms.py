@@ -1,5 +1,5 @@
 from django import forms
-from .models import Products,Categories,Subcategories,SubcategoriesChildParentRelation
+from .models import Product,Category,Subcategory,SubcategoriesChildParentRelation
 
 class TestingDynamicForm(forms.Form):
     
@@ -14,7 +14,7 @@ class TestingDynamicForm(forms.Form):
 
         if(len(path) == 0):
             self.fields['field'] = forms.ModelChoiceField(
-                queryset=Categories.objects.all(),
+                queryset=Category.objects.all(),
                 label="Category: ",
                 empty_label="select an option",
                 widget=forms.Select(attrs={
@@ -25,8 +25,8 @@ class TestingDynamicForm(forms.Form):
 
         elif (len(path) == 1):
              self.fields['field'] = forms.ModelChoiceField(
-                queryset=Subcategories.objects.filter(category=Categories.objects.get(category_id=path[0])),
-                label=f"{Categories.objects.get(category_id=path[0])}'s subcategory: ",
+                queryset=Subcategory.objects.filter(category=Category.objects.get(category_id=path[0])),
+                label=f"{Category.objects.get(category_id=path[0])}'s subcategory: ",
                 empty_label="select an option",
                 widget=forms.Select(attrs={
                         'onchange': 'this.form.submit()', 
@@ -39,8 +39,8 @@ class TestingDynamicForm(forms.Form):
             child_ids = SubcategoriesChildParentRelation.objects.filter(parent_id=parent_id).values_list('child', flat=True)
             if(len(child_ids)>0):
                 self.fields['field'] = forms.ModelChoiceField(
-                    queryset=Subcategories.objects.filter(subcategory_id__in=child_ids),
-                    label=f"{Subcategories.objects.get(subcategory_id=parent_id)}'s subcategory: ",
+                    queryset=Subcategory.objects.filter(subcategory_id__in=child_ids),
+                    label=f"{Subcategory.objects.get(subcategory_id=parent_id)}'s subcategory: ",
                     empty_label="select an option",
                     widget=forms.Select(attrs={
                         'onchange': 'this.form.submit()',
@@ -63,7 +63,7 @@ class TestingDynamicForm(forms.Form):
 
 class ProductAdminForm(forms.ModelForm):
     class Meta:
-        model = Products
+        model = Product
         fields = '__all__'
         widgets = {
             'path': forms.HiddenInput()
@@ -83,13 +83,13 @@ class ProductAdminForm(forms.ModelForm):
         # Add dynamic dropdown
         if len(path_list) == 0:
             category_select = forms.ModelChoiceField(
-                queryset=Categories.objects.all(),
+                queryset=Category.objects.all(),
                 label="Category",
                 widget=forms.Select(attrs={'onchange': 'this.form.submit();'})
             )
         elif len(path_list) == 1:
             category_select = forms.ModelChoiceField(
-                queryset=Subcategories.objects.filter(category_id=path_list[0]),
+                queryset=Subcategory.objects.filter(category_id=path_list[0]),
                 label="Subcategory",
                 widget=forms.Select(attrs={'onchange': 'this.form.submit();'})
             )
@@ -98,7 +98,7 @@ class ProductAdminForm(forms.ModelForm):
             children = SubcategoriesChildParentRelation.objects.filter(parent_id=parent_id).values_list('child', flat=True)
             if children:
                 category_select = forms.ModelChoiceField(
-                    queryset=Subcategories.objects.filter(subcategory_id__in=children),
+                    queryset=Subcategory.objects.filter(subcategory_id__in=children),
                     label="subcategory",
                     widget=forms.Select(attrs={'onchange': 'this.form.submit();'})
                 )
